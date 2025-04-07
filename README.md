@@ -49,15 +49,6 @@ res = spectrum(
     direct_estimate=False,  # skip empirical PSD
     plot=True
 )
-
-# Access the time-domain data
-time_data = res.time_domain
-print("Time-domain samples:", len(time_data))
-print("Mean amplitude:", time_data.combined_signal.mean())
-
-# Access the frequency-domain data
-freq_data = res.frequency_domain
-print("Number of freq bins:", len(freq_data))
 ```
 
 #### 2. Empirical PSD Estimation

@@ -22,32 +22,8 @@ def example1():
         average_firing_rate=0.0,
         random_state=42,
         direct_estimate=False,  # skip empirical PSD estimation
-        plot=False             # we will handle plotting manually
+        plot=True             # we will handle plotting manually
     )
-    
-    # Print basic info about the simulation
-    td = res.time_domain
-    fd = res.frequency_domain
-    print("Example 1:")
-    print("  Time-domain samples:", len(td))
-    print("  Combined signal mean:", td.combined_signal.mean())
-    print("  Number of frequency bins:", len(fd))
-    
-    # Plot and save time-domain signal
-    plt.figure(figsize=(8,4))
-    plt.plot(td.time, td.combined_signal, label="Combined Signal")
-    plt.xlabel("Time (s)")
-    plt.ylabel("Amplitude")
-    plt.title("Example 1: Time-Domain Signal")
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig("static/example1_time_signal.png")
-    plt.close()
-    
-    # Plot and save the theoretical PSD (frequency domain)
-    plt.figure(figsize=(8,4))
-    mask = fd.frequencies > 0
-    plt.loglog(fd.frequencies[mask], fd.combined_spectrum[mask], label="Combined (Theoretical)")
     plt.xlabel("Frequency (Hz)")
     plt.ylabel("Power")
     plt.title("Example 1: Theoretical PSD")
@@ -75,21 +51,11 @@ def example2():
         average_firing_rate=0.0,
         random_state=0,
         direct_estimate=True,  # enable empirical PSD estimation
-        plot=False             # we handle plotting below
+        plot=True             # we handle plotting below
     )
     
-    fd = res_emp.frequency_domain
     print("Example 2:")
-    print("  Number of frequency bins:", len(fd))
-    if fd.empirical_spectrum is not None:
-        print("  Empirical PSD shape:", fd.empirical_spectrum.shape)
-    
-    # Plot and save the PSD comparison (theoretical vs. empirical)
-    plt.figure(figsize=(8,4))
-    mask = fd.frequencies > 0
-    plt.loglog(fd.frequencies[mask], fd.combined_spectrum[mask], label="Combined (Theoretical)")
-    if fd.empirical_spectrum is not None:
-        plt.loglog(fd.frequencies[mask], fd.empirical_spectrum[mask], '--', label="Empirical")
+ 
     plt.xlabel("Frequency (Hz)")
     plt.ylabel("Power")
     plt.title("Example 2: Theoretical vs Empirical PSD")
