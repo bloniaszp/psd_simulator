@@ -1,0 +1,21 @@
+Metadata-Version: 2.4
+Name: spectral_decomposition
+Version: 0.1.0
+Summary: A package for simulating and decomposing PSDs
+Home-page: https://github.com/yourname/spectral_decomposition
+Author: Your Name
+Author-email: you@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: >=3.7
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: matplotlib
+Requires-Dist: spectral-connectivity
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
