@@ -1,4 +1,4 @@
-# Spectral Decomposition Package
+# Gaussian Simulation for Spectral Decomposition 
 
 A Python package to simulate Gaussian time-domain signals from theoretical power spectra (1/f + peaks), and optionally estimate PSDs empirically with [spectral_connectivity](https://github.com/Eden-Kramer-Lab/spectral_connectivity).
 
