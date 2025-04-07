@@ -1,4 +1,4 @@
-name: spectral-env
+name: spectral-decomposition
 channels:
   - edeno
   - conda-forge

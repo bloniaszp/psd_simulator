@@ -30,6 +30,8 @@ python -m pip install -e .
 ## Basic Usage
 #### 1. Simple Simulation
 
+![Theoretical PSD](./static/example1_psd.png)
+
 ```python
 from spectral_decomposition import spectrum
 
@@ -59,6 +61,8 @@ print("Number of freq bins:", len(freq_data))
 ```
 
 #### 2. Empirical PSD Estimation
+
+![Theoretical vs Empirical PSD](./static/example2_psd.png)
 
 ```python
 res_emp = spectrum(
