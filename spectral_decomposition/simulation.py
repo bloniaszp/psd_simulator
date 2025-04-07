@@ -3,9 +3,6 @@ from abc import ABC, abstractmethod
 from numpy.fft import ifft, ifftshift
 
 
-###############################################################################
-# 1) simulate_from_psd with two lengths: one for PSD (n_fft) and one for time (n_time)
-###############################################################################
 def simulate_from_psd(PSD, fs, n_fft, n_time, random_seed=None, lambda_0=0.0):
     """
     Draw a time‐domain realization via random phases + iFFT from 'PSD'.
@@ -70,20 +67,12 @@ def simulate_from_psd(PSD, fs, n_fft, n_time, random_seed=None, lambda_0=0.0):
     time_signal += lambda_0
     return time_signal
 
-
-###############################################################################
-# 2) A base class for simulators
-###############################################################################
 class BaseSimulator(ABC):
     """Abstract base class for time series simulation."""
     @abstractmethod
     def simulate(self):
         raise NotImplementedError
 
-
-###############################################################################
-# 3) A Combined Simulator that uses a large n_fft for the PSD
-###############################################################################
 class CombinedSimulator(BaseSimulator):
     """
     Generates a combined time series with broadband (aperiodic) and rhythmic (periodic) components,
@@ -94,8 +83,8 @@ class CombinedSimulator(BaseSimulator):
       2) Build symmetrical freq axis [-fs/2..+fs/2) of length n_fft.
       3) Construct broadband PSD = 10^(aperiodic_offset)/(knee^2 + |f|^exponent).
       4) Construct rhythmic PSD via Gaussians at ±f0, sum => combined PSD.
-      5) iFFT => time signals of length n_fft, then slice out first n_samples.
-      6) Add `average_firing_rate` in time domain.
+      5) iFFT => time signals of length n_fft
+      6) Add `average_firing_rate` in time domain (should be zero basically always this is just an offset).
     """
     def __init__(
         self,
@@ -130,7 +119,7 @@ class CombinedSimulator(BaseSimulator):
         average_firing_rate : float
             DC offset added to the final combined time signal.
         n_fft : int or None
-            FFT size for building PSD (often >> n_samples). If None, pick a large power-of-2 
+            FFT size for building PSD (often >> n_samples). If None, pick for the user (big enough to be extremely smooth)
             above n_samples + some offset.
         random_state : int or None
             Seed for reproducible phases.
@@ -177,7 +166,7 @@ class CombinedSimulator(BaseSimulator):
         rng_seed = self.random_state
 
         # Build symmetrical freq axis of length n_fft: [-fs/2 .. +fs/2)
-        freqs_shifted = np.fft.fftfreq(n_fft, d=1.0/fs)
+        freqs_shifted = np.fft.fftfreq(n_fft, d=1.0/fs) 
         #freqs_shifted = np.fft.fftshift(freqs_shifted)
 
         # Broadband PSD: 10^(offset) / (k^2 + |f|^exponent)

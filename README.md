@@ -5,9 +5,26 @@ A Python package to simulate Gaussian time-domain signals from theoretical power
 ## Installation
 
 ```bash
-git clone https://github.com/<your_username>/spectral_decomposition.git
-cd spectral_decomposition
-pip install -e .
+# 1) Ensure you have conda installed (e.g., Miniconda or Anaconda).
+#    Then install mamba into the 'base' environment:
+conda install mamba -n base -c conda-forge
+
+# 2) Clone your repository:
+git clone https://github.com/bloniaszp/spectral-decomposition.git
+cd spectral-decomposition
+
+# 3) Create and activate your environment with mamba:
+#    (Assumes environment.yml is in this repo)
+mamba env create -f environment.yml
+mamba activate spectral-decomposition
+
+# 4) (Optional) Install your local package in editable mode
+#    If environment.yml doesn't already do so:
+python -m pip install -e .
+
+# or if you want to install from GitHub directly:
+# python -m pip install git+https://github.com/bloniaszp/spectral-decomposition.git
+
 ```
 
 ## Basic Usage

@@ -92,10 +92,10 @@ def spectrum(
             time_series=signal,
             sampling_frequency=sampling_rate,
             time_halfbandwidth_product=6,
-            n_fft_samples=len(time_data)  # Empirical freq resolution ~ n_samples
+            n_fft_samples=len(time_data)  
         )
         c = Connectivity.from_multitaper(m)
-        power = c.power().squeeze()  # shape ~ N/2+1
+        power = c.power().squeeze()  
         freqs_emp = c.frequencies
 
         # Retain only positive freq from theoretical PSD

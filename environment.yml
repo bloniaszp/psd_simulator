@@ -1,0 +1,18 @@
+name: spectral-env
+channels:
+  - edeno
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - ipykernel
+  - statsmodels
+  - scipy
+  - pip
+  - pytest
+  - pip:
+    - black
+    - "black[jupyter]"
+    - pre-commit
+    - spectral_connectivity
+prefix: /Users/patrick_bloniasz/miniforge3/envs/spectral-env
