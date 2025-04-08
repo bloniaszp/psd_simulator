@@ -29,7 +29,7 @@ def example1():
     plt.title("Example 1: Theoretical PSD")
     plt.legend()
     plt.tight_layout()
-    plt.savefig("static/example1_psd.png")
+    plt.savefig("static/example1.png")
     plt.close()
 
 def example2():
@@ -61,7 +61,7 @@ def example2():
     plt.title("Example 2: Theoretical vs Empirical PSD")
     plt.legend()
     plt.tight_layout()
-    plt.savefig("static/example2_psd.png")
+    plt.savefig("static/example2.png")
     plt.close()
 
 if __name__ == '__main__':
