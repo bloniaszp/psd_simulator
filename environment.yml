@@ -15,4 +15,6 @@ dependencies:
     - "black[jupyter]"
     - pre-commit
     - spectral_connectivity
+    - FOOOF
+    - seaborn
 prefix: /Users/patrick_bloniasz/miniforge3/envs/spectral-env
