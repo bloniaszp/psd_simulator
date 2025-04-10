@@ -30,7 +30,7 @@ python -m pip install -e .
 ## Basic Usage
 #### 1. Simple Simulation
 
-![Theoretical PSD](spectral-decomposition/static/example1_psd.png)
+![Theoretical PSD](static/example1_psd.png)
 
 ```python
 from spectral_decomposition import spectrum
@@ -53,7 +53,7 @@ res = spectrum(
 
 #### 2. Empirical PSD Estimation
 
-![Theoretical vs Empirical PSD](spectral-decomposition/static/example2_psd.png)
+![Theoretical vs Empirical PSD](static/example2_psd.png)
 
 ```python
 res_emp = spectrum(
