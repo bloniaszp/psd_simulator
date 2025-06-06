@@ -91,8 +91,8 @@ def spectrum(
         m = Multitaper(
             time_series=signal,
             sampling_frequency=sampling_rate,
-            n_tapers = 1,
-            time_halfbandwidth_product=1,
+            n_tapers = 5,
+            #time_halfbandwidth_product=5,
             n_fft_samples=len(time_data)  
         )
         c = Connectivity.from_multitaper(m)
