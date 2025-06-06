@@ -1,11 +1,65 @@
 import numpy as np
 from abc import ABC, abstractmethod
 from numpy.fft import ifft, ifftshift
+from math import ceil, log2
+
+def make_broadband_predictor(freqs, f_low, f_high, *, exponent=1.0, knee=0.0):
+    """
+    Shape function for the 1/f broadband term,   S_bb(f) ∝ 1 / (knee + |f|^exponent)
+
+    Parameters
+    ----------
+    freqs : 1-D array
+        Frequency axis (can be two-sided or one-sided, any length).
+    f_low, f_high : float
+        Lower / upper frequency bounds (Hz) that define the predictor mask.
+    exponent : float, optional
+        Aperiodic exponent  (default = 1.0).
+    knee : float, optional
+        Knee parameter k  (default = 0 → pure power-law).
+
+    Returns
+    -------
+    shape : np.ndarray  (same length as `freqs`)
+        Predictor column, zero outside [f_low, f_high].
+    """
+    freqs = np.asarray(freqs)
+    mask  = (freqs >= f_low) & (freqs <= f_high) & (freqs > 0)
+    shape = np.zeros_like(freqs, dtype=float)
+    shape[mask] = 1.0 / (knee + np.abs(freqs[mask])**exponent)
+    return shape
+
+def make_gaussian_bump_predictor(freqs, f_low, f_high, *, center, sigma):
+    """
+    Shape function for a rhythmic peak,
+        S_peak(f) ∝ exp(-(f - center)² / (2 σ²))
+
+    Parameters
+    ----------
+    freqs : 1-D array
+        Frequency axis (same length/order as the empirical PSD).
+    f_low, f_high : float
+        Lower / upper frequency bounds for the mask.
+    center : float
+        Peak centre frequency f₀ (Hz).
+    sigma : float
+        Std-dev (Hz) of the Gaussian bump.
+
+    Returns
+    -------
+    shape : np.ndarray  (same length as `freqs`)
+        Predictor column, zero outside [f_low, f_high].
+    """
+    freqs = np.asarray(freqs)
+    mask  = (freqs >= f_low) & (freqs <= f_high)
+    shape = np.zeros_like(freqs, dtype=float)
+    shape[mask] = np.exp(-((freqs[mask] - center)**2) / (2.0 * sigma**2))
+    return shape
 
 
 def simulate_from_psd(PSD, fs, n_fft, n_time, random_seed=None, lambda_0=0.0):
     """
-    Draw a time‐domain realization via random phases + iFFT from 'PSD'.
+    Draw a time-domain realization via random phases + iFFT from 'PSD'.
 
     * PSD is length = n_fft (the large frequency grid).
     * The final time signal is length = n_time (the actual desired #samples).
@@ -67,6 +121,9 @@ def simulate_from_psd(PSD, fs, n_fft, n_time, random_seed=None, lambda_0=0.0):
     time_signal += lambda_0
     return time_signal
 
+def _nextpow2(x):
+    return 2**int(ceil(log2(x)))
+
 class BaseSimulator(ABC):
     """Abstract base class for time series simulation."""
     @abstractmethod
@@ -97,6 +154,7 @@ class CombinedSimulator(BaseSimulator):
         peaks=None,
         average_firing_rate=0.0,
         n_fft=None,
+        target_df=0.01,
         random_state=None
     ):
         """
@@ -140,9 +198,10 @@ class CombinedSimulator(BaseSimulator):
                 if expected_n != self.n_samples:
                     raise ValueError("n_samples and duration are inconsistent.")
 
-        # Decide on n_fft if none provided
         if n_fft is None:
-            self.n_fft = 100000 + (2 ** int(np.ceil(np.log2(self.n_samples))))
+            required = int(ceil(self.sampling_rate / target_df))
+            required = max(required, self.n_samples)
+            self.n_fft = _nextpow2(required)
         else:
             self.n_fft = int(n_fft)
 
@@ -169,8 +228,8 @@ class CombinedSimulator(BaseSimulator):
         freqs_shifted = np.fft.fftfreq(n_fft, d=1.0/fs) 
         #freqs_shifted = np.fft.fftshift(freqs_shifted)
 
-        # Broadband PSD: 10^(offset) / (k^2 + |f|^exponent)
-        denom = (self.knee**2 + np.abs(freqs_shifted)**self.aperiodic_exponent)
+        # Broadband PSD: 10^(offset) / (k + |f|^exponent)
+        denom = (self.knee + np.abs(freqs_shifted)**self.aperiodic_exponent)
         with np.errstate(divide='ignore', invalid='ignore'):
             broadband_psd_shifted = (10.0**self.aperiodic_offset) / denom
         zero_idx = np.argmin(np.abs(freqs_shifted))
