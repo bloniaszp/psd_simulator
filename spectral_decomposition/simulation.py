@@ -262,9 +262,9 @@ class CombinedSimulator(BaseSimulator):
         )
         rhythmic_signal_big = simulate_from_psd(
             rhythmic_psd_unshifted, fs, n_fft, n_fft,
-            random_seed=rng_seed, lambda_0=0.0
+            random_seed=rng_seed + 1, lambda_0=0.0
         )
-        combined_signal_big = broadband_signal_big + rhythmic_signal_big + self.average_firing_rate
+        combined_signal_big = broadband_signal_big + rhythmic_signal_big 
 
         broadband_signal = broadband_signal_big[:n_time]
         rhythmic_signal = rhythmic_signal_big[:n_time]
