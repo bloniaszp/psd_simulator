@@ -10,20 +10,20 @@ A Python package to simulate Gaussian time-domain signals from theoretical power
 conda install mamba -n base -c conda-forge
 
 # 2) Clone your repository:
-git clone https://github.com/bloniaszp/spectral-decomposition.git
-cd spectral-decomposition
+git clone https://github.com/bloniaszp/psd_simulator.git
+cd psd_simulator
 
 # 3) Create and activate your environment with mamba:
 #    (Assumes environment.yml is in this repo)
 mamba env create -f environment.yml
-mamba activate spectral-decomposition
+mamba activate psd_simulator
 
 # 4) (Optional) Install your local package in editable mode
 #    If environment.yml doesn't already do so:
 python -m pip install -e .
 
 # or if you want to install from GitHub directly:
-# python -m pip install git+https://github.com/bloniaszp/spectral-decomposition.git
+# python -m pip install git+https://github.com/bloniaszp/psd_simulator.git
 
 ```
 
@@ -33,7 +33,7 @@ python -m pip install -e .
 ![Theoretical PSD](static/example1_psd.png)
 
 ```python
-from spectral_decomposition import spectrum
+from psd_simulator import spectrum
 
 # Simulate 2 seconds at 500 Hz, with a 1/f exponent=2.0, offset=1.0
 # plus a peak at 10 Hz (amplitude=50, sigma=2).
